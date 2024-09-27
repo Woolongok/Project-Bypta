@@ -1,20 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImageStoryManager : MonoBehaviour
+public class MultiplePanelScene : MonoBehaviour
 {
-    public Image storyImage;
-    public Sprite[] storySprites;
+    public GameObject[] storySprites;
     private int currentIndex = 0;
-
-    void Start()
-    {
-        if (storySprites.Length > 0)
-        {
-            storyImage.sprite = storySprites[currentIndex];
-        }
-    }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -29,10 +21,10 @@ public class ImageStoryManager : MonoBehaviour
 
     public void NextImage()
     {
-        if (currentIndex < storySprites.Length - 1)
+        if (currentIndex <= storySprites.Length - 1)
         {
+            storySprites[currentIndex].gameObject.SetActive(true);
             currentIndex++;
-            storyImage.sprite = storySprites[currentIndex];
         }
     }
 
@@ -41,7 +33,7 @@ public class ImageStoryManager : MonoBehaviour
         if (currentIndex > 0)
         {
             currentIndex--;
-            storyImage.sprite = storySprites[currentIndex];
+            storySprites[currentIndex].gameObject.SetActive(false);
         }
     }
 }
