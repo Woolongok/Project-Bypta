@@ -1,10 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Unity.Mathematics;
 
 public class DragAndDropLimited : MonoBehaviour
 {
+    public Transform parrentBatteries;
     [SerializeField] private int matchId;
-
+    public GameObject[] cables;
+    public bool isDone = false;
+    public bool isCableType = true;
+    public GameObject batterySprite;
     Vector3 offset;
     private SpriteRenderer image;
     public string itemTag = "Item";
@@ -15,6 +21,7 @@ public class DragAndDropLimited : MonoBehaviour
     private Vector2 velocity = Vector2.zero;
     private Vector2 startPos;
     Collider2D closestDropArea;
+    public AudioSource plug;
 
     List<Collider2D> dropAreas = new List<Collider2D>();
 
@@ -125,10 +132,20 @@ public class DragAndDropLimited : MonoBehaviour
 
     private void Update()
     {
-        if (closestDropArea is not null && transform.position == closestDropArea.transform.position)
+        if (closestDropArea is not null && Vector2.Distance(transform.position, closestDropArea.transform.position) < 0.05)
         {
-            connectedCable.SetActive(true);
+            plug.Play();
+            if (isCableType)
+            {
+                connectedCable.SetActive(true);
+            }
+            else
+            {
+                Instantiate(batterySprite, closestDropArea.transform.position + new Vector3(0,0,-9), quaternion.identity, parrentBatteries);
+            }
+
             gameObject.SetActive(false);
+            isDone = true;
         }
         if (setPos && closestDropArea != null && !goBack)
         {

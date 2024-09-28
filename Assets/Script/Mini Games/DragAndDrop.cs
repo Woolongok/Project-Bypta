@@ -5,7 +5,7 @@ public class DragAndDrop : MonoBehaviour
 {
     [SerializeField] private int matchId;
     bool canUnoccupiedFirstIn = true;
-    bool firstIn = true;
+    public bool firstIn = true;
     Vector3 offset;
     private SpriteRenderer image;
     public string itemTag = "Item";
@@ -79,7 +79,9 @@ public class DragAndDrop : MonoBehaviour
                     setPos = true;
                     objectMatchForm.SetOccupied(true);
                     Debug.Log("Correct!");
-                } 
+
+                    gameObject.GetComponent<DragAndDrop>().enabled = false;
+                }
                 else
                 {
                     setPos = true;
@@ -148,7 +150,7 @@ public class DragAndDrop : MonoBehaviour
         else if (earlyPlace != null && firstIn)
         {
             transform.position = Vector2.SmoothDamp(transform.position,earlyPlace.transform.position + new Vector3(0, 0, -3), ref velocity, 0.1f);
-            if (transform.position == earlyPlace.transform.position)
+            if ((Vector2)transform.position == (Vector2)earlyPlace.transform.position)
             {
                 firstIn = false;
             }
